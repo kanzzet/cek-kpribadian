@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Kepribadian Komprehensif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 900px; 
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+        .header {
+            background-color: #3b82f6; 
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            border-top-left-radius: 1.5rem;
+            border-top-right-radius: 1.5rem;
+        }
+        .card {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-grow: 1;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem; 
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
+        .btn-primary {
+            background-color: #2563eb; 
+            color: white;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: #1e40af; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+        }
+        .btn-option {
+            background-color: #e0f2fe; 
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+            margin-bottom: 0.75rem;
+            text-align: left; 
+            padding-left: 1.25rem;
+        }
+        .btn-option:hover {
+            background-color: #bfdbfe; 
+        }
+        .btn-selected {
+            background-color: #93c5fd; 
+            color: #1e40af;
+            border: 1px solid #1e40af;
+        }
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 2rem;
+        }
+        .result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem; 
+            width: 100%;
+            max-width: 700px;
+            margin-top: 1rem;
+        }
+        .dimension-result-block { 
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .result-bar-row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .result-label-left, .result-label-right {
+            font-weight: 600;
+            color: #334155;
+            flex-shrink: 0;
+            width: 100px; 
+            text-align: right;
+            padding: 0 0.5rem; 
+        }
+        .result-label-right {
+            text-align: left;
+        }
+        .result-bar-wrapper {
+            flex-grow: 1;
+            position: relative;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 5px;
+        }
+        .result-bar {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            border-radius: 5px;
+            transition: width 0.5s ease-out; 
+        }
+        .result-bar-introvert { background-color: #3b82f6; }
+        .result-bar-visionary { background-color: #f59e0b; }
+        .result-bar-rational { background-color: #10b981; }
+        .result-bar-planning { background-color: #8b5cf6; }
+        .result-bar-assertive { background-color: #ef4444; }
+
+        .result-percentage-display {
+            font-weight: 700;
+            font-size: 1rem; 
+            color: #1e40af;
+            position: absolute;
+            top: -25px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .result-percentage-circle {
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border: 2px solid;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%); 
+            z-index: 10;
+        }
+        .result-percentage-circle-introvert { border-color: #3b82f6; }
+        .result-percentage-circle-visionary { border-color: #f59e0b; }
+        .result-percentage-circle-rational { border-color: #10b981; }
+        .result-percentage-circle-planning { border-color: #8b5cf6; }
+        .result-percentage-circle-assertive { border-color: #ef4444; }
+
+        .result-explanation-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: left;
+            color: #4b5563;
+            line-height: 1.6;
+            margin-top: 1rem; 
+        }
+        .result-explanation-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.75rem;
+        }
+        .result-explanation-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .question-counter {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 1rem;
+        }
+
+        
+        @media (max-width: 639px) {
+            .result-label-left, .result-label-right {
+                width: 75px; 
+                padding: 0 0.25rem;
+                font-size: 0.9rem; 
+            }
+            .result-percentage-display {
+                font-size: 0.9rem; 
+            }
+        }
+        @media (min-width: 640px) {
+            .btn {
+                max-width: none;
+            }
+            .question-options {
+                width: 75%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Tes Kepribadian Komprehensif
+        </div>
+
+        <div id="start-screen" class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Temukan Tipe Kepribadian Anda!</h2>
+            <p class="text-gray-600 mb-8">Jawablah serangkaian pertanyaan untuk mendapatkan wawasan tentang berbagai dimensi kepribadian Anda.</p>
+            <button id="start-button" class="btn btn-primary">Mulai Tes</button>
+        </div>
+
+        <div id="question-screen" class="card hidden">
+            <p id="question-text" class="question-text"></p>
+            <div id="options-container" class="question-options w-full flex flex-col items-center">
+            </div>
+            <p id="question-counter" class="question-counter"></p>
+        </div>
+
+        <div id="result-screen" class="card hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Hasil Analisis Kepribadian Anda</h2>
+            <div class="result-section">
+            </div>
+            <div id="summary-explanation" class="result-explanation-box mt-8">
+                <h3>Ringkasan Kepribadian Anda</h3>
+                <p>Berdasarkan jawaban Anda, berikut adalah gambaran umum tentang sifat-sifat kepribadian Anda di berbagai dimensi. Ingatlah bahwa ini adalah gambaran umum dan kepribadian manusia itu kompleks dan dinamis.</p>
+            </div>
+            <button id="retake-button" class="btn btn-primary mt-8">Ulangi Tes</button>
+        </div>
+    </div>
+
+    <script>
+        const dimensions = {
+            introvert: { name: "Introvert", opposite: "Ekstrovert", color: "#3b82f6", explanation: {
+                high: "Anda memiliki kecenderungan Introvert yang sangat kuat. Anda mungkin adalah seseorang yang mendapatkan energi dari waktu sendirian, pemikiran mendalam, dan interaksi yang berkualitas dengan lingkaran kecil. Anda mungkin menemukan lingkungan yang ramai cukup melelahkan dan lebih menyukai ketenangan untuk memproses informasi dan perasaan.",
+                mediumHigh: "Anda cenderung Introvert. Anda kemungkinan besar mendapatkan energi dari waktu sendirian dan merasa nyaman dalam kelompok kecil atau percakapan yang mendalam. Meskipun Anda dapat menikmati interaksi sosial, Anda mungkin memerlukan waktu sendiri untuk memulihkan diri.",
+                neutral: "Anda berada di tengah-tengah spektrum, menunjukkan karakteristik Introvert dan Ekstrovert yang seimbang. Anda mungkin nyaman dalam berbagai situasi sosial, tetapi juga menghargai waktu sendirian. Anda bisa menjadi seorang 'ambivert' yang fleksibel dalam beradaptasi dengan lingkungan.",
+                mediumLow: "Anda cenderung Ekstrovert. Anda kemungkinan besar mendapatkan energi dari interaksi sosial dan menikmati berada di pusat perhatian. Anda mungkin merasa terinspirasi dan bersemangat ketika dikelilingi oleh orang lain dan mencari peluang untuk bersosialisasi.",
+                low: "Anda memiliki kecenderungan Ekstrovert yang sangat kuat. Anda adalah individu yang sangat bersemangat dan berenergi tinggi yang berkembang pesat dalam interaksi sosial dan aktivitas kelompok. Anda mungkin merasa paling hidup ketika berada di tengah keramaian dan mencari stimulasi eksternal."
+            }},
+            visionary: { name: "Visioner", opposite: "Realistis", color: "#f59e0b", explanation: {
+                high: "Anda sangat Visioner. Anda cenderung fokus pada gambaran besar, masa depan, dan potensi yang belum terealisasi. Anda suka berimajinasi, berpikir di luar kotak, dan menjelajahi ide-ide baru, terkadang mengabaikan detail praktis.",
+                mediumHigh: "Anda cenderung Visioner. Anda adalah pemikir ide-ide besar dan memiliki kemampuan untuk melihat potensi di masa depan. Anda menikmati konsep abstrak dan berorientasi pada inovasi, meskipun Anda juga dapat menghargai kenyataan yang ada.",
+                neutral: "Anda seimbang antara Visioner dan Realistis. Anda mampu melihat gambaran besar sekaligus memperhatikan detail. Anda bisa berinovasi sambil tetap berpijak pada kenyataan dan praktis.",
+                mediumLow: "Anda cenderung Realistis. Anda fokus pada kenyataan yang ada, fakta, dan detail praktis. Anda lebih suka bekerja dengan apa yang terbukti dan konkret, serta menghargai stabilitas dan hal-hal yang dapat diukur.",
+                low: "Anda sangat Realistis. Anda adalah individu yang sangat praktis dan berorientasi pada detail. Anda percaya pada apa yang bisa dilihat dan dibuktikan, serta cenderung berhati-hati terhadap ide-ide abstrak yang tidak memiliki dasar yang kuat."
+            }},
+            rational: { name: "Rasional", opposite: "Emosional", color: "#10b981", explanation: {
+                high: "Anda sangat Rasional. Anda cenderung membuat keputusan berdasarkan logika, analisis objektif, dan data. Emosi mungkin tidak terlalu memengaruhi penilaian Anda, dan Anda menghargai konsistensi serta kebenaran faktual.",
+                mediumHigh: "Anda cenderung Rasional. Anda mengutamakan logika dan pemikiran objektif dalam menghadapi situasi. Meskipun Anda menyadari emosi, Anda berusaha untuk membuat keputusan yang didasarkan pada penalaran yang kuat.",
+                neutral: "Anda seimbang antara Rasional dan Emosional. Anda mampu menggabungkan logika dan intuisi dalam proses pengambilan keputusan. Anda dapat mempertimbangkan fakta sekaligus peka terhadap perasaan diri sendiri dan orang lain.",
+                mediumLow: "Anda cenderung Emosional. Anda sangat peka terhadap perasaan Anda sendiri dan orang lain, dan emosi sering kali menjadi panduan utama dalam keputusan Anda. Anda menghargai harmoni, empati, dan hubungan personal.",
+                low: "Anda sangat Emosional. Anda adalah individu yang sangat intuitif dan empatik, di mana perasaan memiliki peran dominan dalam persepsi dan tindakan Anda. Anda mungkin sering membuat keputusan berdasarkan hati dan memiliki respons emosional yang kuat terhadap lingkungan."
+            }},
+            planning: { name: "Perencanaan", opposite: "Improvisasi", color: "#8b5cf6", explanation: {
+                high: "Anda sangat berorientasi pada Perencanaan. Anda merasa nyaman dengan jadwal, daftar, dan persiapan matang. Anda suka memiliki kontrol atas situasi dan merasa tidak nyaman dengan ketidakpastian atau perubahan mendadak.",
+                mediumHigh: "Anda cenderung berorientasi pada Perencanaan. Anda suka merencanakan ke depan dan menghargai struktur. Anda merasa lebih aman ketika memiliki rencana yang jelas, meskipun Anda juga bisa beradaptasi jika diperlukan.",
+                neutral: "Anda seimbang antara Perencanaan dan Improvisasi. Anda mampu merencanakan dengan baik, namun juga fleksibel dan dapat beradaptasi dengan perubahan. Anda bisa menikmati spontanitas tetapi juga menghargai persiapan.",
+                mediumLow: "Anda cenderung berorientasi pada Improvisasi. Anda lebih suka fleksibilitas dan spontanitas daripada jadwal yang ketat. Anda cepat beradaptasi dengan perubahan dan menikmati kebebasan untuk bertindak tanpa banyak persiapan.",
+                low: "Anda sangat berorientasi pada Improvisasi. Anda adalah individu yang sangat spontan dan adaptif. Anda berkembang dalam situasi yang tidak terduga dan sering kali menemukan solusi terbaik di saat-saat terakhir. Anda tidak suka terikat oleh rencana yang kaku."
+            }},
+            assertive: { name: "Tegas", opposite: "Waspada", color: "#ef4444", explanation: {
+                high: "Anda sangat Tegas. Anda percaya diri dalam mengambil keputusan, tidak ragu untuk menyuarakan pendapat, dan cenderung berani mengambil risiko. Anda proaktif dan sering menjadi pemimpin dalam berbagai situasi.",
+                mediumHigh: "Anda cenderung Tegas. Anda memiliki keyakinan kuat pada kemampuan Anda dan tidak takut untuk mengambil inisiatif. Anda dapat dengan jelas menyatakan keinginan dan batasan Anda, meskipun Anda juga dapat mendengarkan orang lain.",
+                neutral: "Anda seimbang antara Tegas dan Waspada. Anda dapat menjadi tegas saat diperlukan, tetapi juga mampu menunjukkan kehati-hatian dan mempertimbangkan risiko. Anda fleksibel dalam pendekatan Anda terhadap situasi.",
+                mediumLow: "Anda cenderung Waspada. Anda lebih suka berhati-hati, memikirkan konsekuensi, dan menghindari risiko yang tidak perlu. Anda mungkin membutuhkan waktu lebih lama untuk membuat keputusan dan lebih suka mengamati sebelum bertindak.",
+                low: "Anda sangat Waspada. Anda adalah individu yang sangat hati-hati, analitis, dan cenderung berpikir dua kali sebelum bertindak. Anda memprioritaskan keamanan dan sering kali mengantisipasi masalah potensial sebelum muncul. Anda mungkin tidak nyaman dengan pengambilan risiko."
+            }}
+        };
+
+        const questions = [
+            {
+                question: "Bagaimana Anda mengisi ulang energi setelah aktivitas sosial yang panjang?",
+                options: [
+                    { text: "Menghabiskan waktu sendirian, membaca buku, atau melakukan hobi solo.", score: { introvert: 1 } },
+                    { text: "Berinteraksi dengan lebih banyak orang, pergi ke pesta, atau melakukan aktivitas berkelompok.", score: { introvert: 0 } }
+                ]
+            },
+            {
+                question: "Dalam sebuah kelompok baru, Anda biasanya:",
+                options: [
+                    { text: "Cenderung mendengarkan dan mengamati sebelum berbicara.", score: { introvert: 1 } },
+                    { text: "Langsung berpartisipasi dan memulai percakapan.", score: { introvert: 0 } }
+                ]
+            },
+            {
+                question: "Anda merasa paling nyaman dalam situasi:",
+                options: [
+                    { text: "Lingkungan yang tenang dan akrab dengan beberapa orang.", score: { introvert: 1 } },
+                    { text: "Lingkungan yang ramai, banyak interaksi, dan penuh energi.", score: { introvert: 0 } }
+                ]
+            },
+            {
+                question: "Apa yang lebih Anda sukai setelah seminggu bekerja keras?",
+                options: [
+                    { text: "Menghabiskan akhir pekan di rumah dengan santai atau melakukan hobi pribadi.", score: { introvert: 1 } },
+                    { text: "Merencanakan kegiatan sosial, seperti jalan-jalan atau kumpul-kumpul dengan teman.", score: { introvert: 0 } }
+                ]
+            },
+            {
+                question: "Anda merasa lebih lelah setelah:",
+                options: [
+                    { text: "Acara sosial yang ramai dan membutuhkan banyak interaksi.", score: { introvert: 1 } },
+                    { text: "Menghabiskan banyak waktu sendirian tanpa interaksi.", score: { introvert: 0 } }
+                ]
+            },
+            {
+                question: "Ketika dihadapkan pada masalah, Anda cenderung:",
+                options: [
+                    { text: "Mencari solusi inovatif dan berpikir tentang kemungkinan di masa depan.", score: { visionary: 1 } },
+                    { text: "Fokus pada apa yang telah berhasil di masa lalu dan solusi yang terbukti.", score: { visionary: 0 } }
+                ]
+            },
+            {
+                question: "Anda lebih suka berdiskusi tentang:",
+                options: [
+                    { text: "Teori, ide-ide abstrak, dan konsep-konsep baru.", score: { visionary: 1 } },
+                    { text: "Fakta, detail, dan hal-hal yang dapat langsung diterapkan.", score: { visionary: 0 } }
+                ]
+            },
+            {
+                question: "Bagaimana Anda memandang detail dalam sebuah proyek?",
+                options: [
+                    { text: "Detail sering terasa membosankan; Anda lebih suka gambaran besar.", score: { visionary: 1 } },
+                    { text: "Detail sangat penting untuk memastikan semuanya berjalan lancar.", score: { visionary: 0 } }
+                ]
+            },
+            {
+                question: "Anda tertarik pada buku atau film yang:",
+                options: [
+                    { text: "Mengeksplorasi konsep futuristik atau dunia fantasi yang kompleks.", score: { visionary: 1 } },
+                    { text: "Berdasarkan kejadian nyata, sejarah, atau tutorial praktis.", score: { visionary: 0 } }
+                ]
+            },
+            {
+                question: "Ketika merencanakan masa depan, Anda cenderung:",
+                options: [
+                    { text: "Memimpikan kemungkinan-kemungkinan besar tanpa batasan.", score: { visionary: 1 } },
+                    { text: "Membuat rencana yang konkret dan realistis berdasarkan sumber daya saat ini.", score: { visionary: 0 } }
+                ]
+            },
+            {
+                question: "Ketika membuat keputusan, apa yang lebih Anda prioritaskan?",
+                options: [
+                    { text: "Logika, data, dan analisis objektif.", score: { rational: 1 } },
+                    { text: "Perasaan, nilai-nilai pribadi, dan dampaknya pada orang lain.", score: { rational: 0 } }
+                ]
+            },
+            {
+                question: "Bagaimana Anda menanggapi kritik?",
+                options: [
+                    { text: "Menganalisis secara logis untuk melihat validitasnya.", score: { rational: 1 } },
+                    { text: "Mungkin merasa tersinggung atau mempertimbangkan perasaan di baliknya.", score: { rational: 0 } }
+                ]
+            },
+            {
+                question: "Anda cenderung lebih percaya pada:",
+                options: [
+                    { text: "Penalaran yang kuat dan bukti empiris.", score: { rational: 1 } },
+                    { text: "Intuisif dan firasat Anda.", score: { rational: 0 } }
+                ]
+            },
+            {
+                question: "Dalam diskusi, Anda lebih fokus pada:",
+                options: [
+                    { text: "Memenangkan argumen dengan fakta dan logika.", score: { rational: 1 } },
+                    { text: "Mempertahankan harmoni dan menghindari konflik emosional.", score: { rational: 0 } }
+                ]
+            },
+            {
+                question: "Apa yang membuat Anda merasa paling puas?",
+                options: [
+                    { text: "Menemukan solusi yang logis untuk masalah yang kompleks.", score: { rational: 1 } },
+                    { text: "Membantu orang lain dan membangun hubungan yang kuat.", score: { rational: 0 } }
+                ]
+            },
+            {
+                question: "Ketika bepergian, Anda lebih suka:",
+                options: [
+                    { text: "Merencanakan setiap detail perjalanan jauh-jauh hari.", score: { planning: 1 } },
+                    { text: "Berangkat dengan sedikit rencana dan melihat apa yang terjadi.", score: { planning: 0 } }
+                ]
+            },
+            {
+                question: "Bagaimana Anda menghadapi tugas baru?",
+                options: [
+                    { text: "Membuat daftar, jadwal, dan memecahnya menjadi langkah-langkah kecil.", score: { planning: 1 } },
+                    { text: "Langsung memulai dan menyesuaikan strategi saat Anda berjalan.", score: { planning: 0 } }
+                ]
+            },
+            {
+                question: "Perubahan rencana mendadak membuat Anda:",
+                options: [
+                    { text: "Merasa sedikit frustrasi atau tidak nyaman.", score: { planning: 1 } },
+                    { text: "Merasa bersemangat karena adanya tantangan baru.", score: { planning: 0 } }
+                ]
+            },
+            {
+                question: "Lingkungan kerja yang ideal bagi Anda adalah:",
+                options: [
+                    { text: "Terstruktur, dengan deadline yang jelas dan prosedur yang terdefinisi.", score: { planning: 1 } },
+                    { text: "Fleksibel, dengan kebebasan untuk mengatur jadwal dan pendekatan Anda sendiri.", score: { planning: 0 } }
+                ]
+            },
+            {
+                question: "Apa yang Anda rasakan tentang jadwal?",
+                options: [
+                    { text: "Jadwal membantu saya tetap terorganisir dan produktif.", score: { planning: 1 } },
+                    { text: "Jadwal terasa membatasi dan saya lebih suka spontanitas.", score: { planning: 0 } }
+                ]
+            },
+            {
+                question: "Dalam situasi yang tidak pasti, Anda cenderung:",
+                options: [
+                    { text: "Mengambil tindakan cepat dan percaya pada intuisi Anda.", score: { assertive: 1 } },
+                    { text: "Menganalisis semua kemungkinan dan berhati-hati sebelum bertindak.", score: { assertive: 0 } }
+                ]
+            },
+            {
+                question: "Ketika Anda memiliki pendapat yang kuat, Anda:",
+                options: [
+                    { text: "Langsung menyuarakannya dengan yakin.", score: { assertive: 1 } },
+                    { text: "Memilih waktu yang tepat atau mungkin menyimpannya jika tidak perlu.", score: { assertive: 0 } }
+                ]
+            },
+            {
+                question: "Bagaimana Anda merespons tekanan atau kritik?",
+                options: [
+                    { text: "Tetap tenang dan percaya diri, membela posisi Anda jika perlu.", score: { assertive: 1 } },
+                    { text: "Mungkin merasa terpengaruh dan mempertimbangkan kembali tindakan Anda.", score: { assertive: 0 } }
+                ]
+            },
+            {
+                question: "Anda cenderung mengambil risiko:",
+                options: [
+                    { text: "Ketika ada peluang besar, Anda bersedia mengambil risiko yang diperhitungkan.", score: { assertive: 1 } },
+                    { text: "Hanya jika risiko minimal atau tidak ada sama sekali.", score: { assertive: 0 } }
+                ]
+            },
+            {
+                question: "Dalam kelompok, Anda lebih suka:",
+                options: [
+                    { text: "Memimpin atau mengambil peran yang proaktif.", score: { assertive: 1 } },
+                    { text: "Mengikuti arahan atau berkontribusi di balik layar.", score: { assertive: 0 } }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        const scores = {
+            introvert: 0,
+            visionary: 0,
+            rational: 0,
+            planning: 0,
+            assertive: 0
+        };
+
+        const maxScores = {
+            introvert: 0,
+            visionary: 0,
+            rational: 0,
+            planning: 0,
+            assertive: 0
+        };
+
+        questions.forEach(q => {
+            q.options.forEach(option => {
+                for (const dim in option.score) {
+                    if (option.score[dim] === 1) {
+                        maxScores[dim]++;
+                    }
+                }
+            });
+        });
+
+        const startScreen = document.getElementById('start-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const startButton = document.getElementById('start-button');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionCounter = document.getElementById('question-counter');
+
+        const resultSection = document.querySelector('.result-section');
+        const summaryExplanation = document.getElementById('summary-explanation');
+        const retakeButton = document.getElementById('retake-button');
+
+        startButton.addEventListener('click', startTest);
+        retakeButton.addEventListener('click', restartTest);
+
+        
+        function showScreen(screenToShow) {
+            startScreen.classList.add('hidden');
+            questionScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            screenToShow.classList.remove('hidden');
+        }
+
+        
+        function startTest() {
+            currentQuestionIndex = 0;
+            for (const dim in scores) {
+                scores[dim] = 0;
+            }
+            showScreen(questionScreen);
+            loadQuestion();
+        }
+
+        
+        function loadQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                questionText.textContent = question.question;
+                optionsContainer.innerHTML = '';
+
+                question.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = option.text;
+                    button.classList.add('btn', 'btn-option');
+                    button.dataset.scores = JSON.stringify(option.score);
+                    button.addEventListener('click', selectAnswer);
+                    optionsContainer.appendChild(button);
+                });
+                questionCounter.textContent = `Pertanyaan ${currentQuestionIndex + 1} dari ${questions.length}`;
+            } else {
+                showResult();
+            }
+        }
+
+        
+        function selectAnswer(event) {
+            Array.from(optionsContainer.children).forEach(button => {
+                button.classList.remove('btn-selected');
+                button.disabled = true;
+            });
+
+            const selectedButton = event.target;
+            selectedButton.classList.add('btn-selected');
+
+            const selectedOptionScores = JSON.parse(selectedButton.dataset.scores);
+            for (const dim in selectedOptionScores) {
+                scores[dim] += selectedOptionScores[dim];
+            }
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 500);
+        }
+
+        
+        function showResult() {
+            resultSection.innerHTML = ''; 
+
+            const percentages = {};
+            for (const dim in scores) {
+                const percentage = (scores[dim] / maxScores[dim]) * 100;
+                percentages[dim] = percentage;
+
+                const dimensionResultBlock = document.createElement('div');
+                dimensionResultBlock.classList.add('dimension-result-block');
+
+                const barRow = document.createElement('div');
+                barRow.classList.add('result-bar-row');
+
+                const labelLeft = document.createElement('span');
+                labelLeft.classList.add('result-label-left');
+                labelLeft.textContent = dimensions[dim].opposite;
+
+                const barWrapper = document.createElement('div');
+                barWrapper.classList.add('result-bar-wrapper');
+
+                const bar = document.createElement('div');
+                bar.classList.add('result-bar', `result-bar-${dim}`);
+                bar.style.width = `${percentage}%`;
+
+                const percentageDisplay = document.createElement('span');
+                percentageDisplay.classList.add('result-percentage-display');
+                percentageDisplay.textContent = `${percentage.toFixed(0)}% ${dimensions[dim].name}`;
+
+                let textLeft = percentage;
+                let textTransform = 'translateX(-50%)'; 
+
+                if (percentage < 15) {
+                    textLeft = 0;
+                    textTransform = 'translateX(0)';
+                } else if (percentage > 85) {
+                    textLeft = 100;
+                    textTransform = 'translateX(-100%)';
+                }
+                percentageDisplay.style.left = `${textLeft}%`;
+                percentageDisplay.style.transform = textTransform;
+
+
+                const percentageCircle = document.createElement('div');
+                percentageCircle.classList.add('result-percentage-circle', `result-percentage-circle-${dim}`);
+
+                let circleLeft = percentage;
+                let circleTransformX = '-50%'; 
+
+                if (percentage === 0) {
+                    circleLeft = 0;
+                    circleTransformX = '-50%'; 
+                } else if (percentage === 100) {
+                    circleLeft = 100;
+                    circleTransformX = '-50%'; 
+                }
+                percentageCircle.style.left = `${circleLeft}%`;
+                percentageCircle.style.transform = `translateX(${circleTransformX}) translateY(-50%)`;
+
+                barWrapper.appendChild(bar);
+                barWrapper.appendChild(percentageDisplay);
+                barWrapper.appendChild(percentageCircle);
+
+                const labelRight = document.createElement('span');
+                labelRight.classList.add('result-label-right');
+                labelRight.textContent = dimensions[dim].name;
+
+                barRow.appendChild(labelLeft);
+                barRow.appendChild(barWrapper);
+                barRow.appendChild(labelRight);
+                dimensionResultBlock.appendChild(barRow); 
+
+                const dimensionExplanationBox = document.createElement('div');
+                dimensionExplanationBox.classList.add('result-explanation-box');
+                const dimensionExplanationTitle = document.createElement('h3');
+                dimensionExplanationTitle.textContent = `${dimensions[dim].name} vs. ${dimensions[dim].opposite}`;
+                const dimensionExplanationText = document.createElement('p');
+
+                let explanationText = '';
+                if (percentage >= 75) {
+                    explanationText = dimensions[dim].explanation.high;
+                } else if (percentage >= 55) {
+                    explanationText = dimensions[dim].explanation.mediumHigh;
+                } else if (percentage >= 45) {
+                    explanationText = dimensions[dim].explanation.neutral;
+                } else if (percentage >= 25) {
+                    explanationText = dimensions[dim].explanation.mediumLow;
+                } else {
+                    explanationText = dimensions[dim].explanation.low;
+                }
+                dimensionExplanationText.textContent = explanationText;
+
+                dimensionExplanationBox.appendChild(dimensionExplanationTitle);
+                dimensionExplanationBox.appendChild(dimensionExplanationText);
+                dimensionResultBlock.appendChild(dimensionExplanationBox); 
+
+                resultSection.appendChild(dimensionResultBlock); 
+            }
+            showScreen(resultScreen);
+        }
+
+        
+        function restartTest() {
+            currentQuestionIndex = 0;
+            for (const dim in scores) {
+                scores[dim] = 0;
+            }
+            showScreen(startScreen);
+        }
+
+        showScreen(startScreen);
+    </script>
+</body>
+</html>
+
